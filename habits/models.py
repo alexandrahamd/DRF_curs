@@ -1,18 +1,10 @@
 from django.conf import settings
 from django.db import models
+from django.core.validators import MinValueValidator, MaxValueValidator
 
 
 # Create your models here.
 class Habit(models.Model):
-    DAY = "day"
-    WEEK = "week"
-    MONTH = "month"
-
-    CHOICES = [
-        (DAY, "day"),
-        (WEEK, "week"),
-        (MONTH, "month"),
-    ]
 
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, verbose_name='пользователь')
     place = models.CharField(max_length=150, null=True, blank=True, verbose_name='место')
@@ -29,20 +21,23 @@ class Habit(models.Model):
                                          verbose_name='связанная привычка')
 
     # периодичность* (по умолчанию ежедневная) - периодичность выполнения привычки для напоминания в днях
-    period = models.CharField(max_length=15, choices=CHOICES, verbose_name='период', default=DAY)
+    period = models.IntegerField(verbose_name='период', null=True, blank=True,
+                                 validators=[MinValueValidator(1), MaxValueValidator(7)])
 
     # вознаграждение -* чем пользователь должен себя вознаградить после выполнения
-    reward = models.CharField(max_length=150,  null=True, blank=True, verbose_name='вознаграждение')
+    reward = models.CharField(max_length=150, null=True, blank=True, verbose_name='вознаграждение')
 
     # время на выполнение -* время, которое предположительно потратит пользователь на выполнение привычки
-    lead_time = models.IntegerField(default=120, null=True, blank=True, verbose_name='время выполнения')
+    lead_time = models.IntegerField(default=120, null=True, blank=True, verbose_name='время выполнения',
+                                    validators=[MinValueValidator(0), MaxValueValidator(120)])
 
-    # ризнак публичности -* привычки можно публиковать в общий доступ, чтобы другие пользователи могли брать в пример чужие привычки
+    # признак публичности -* привычки можно публиковать в общий доступ, чтобы другие пользователи могли брать в пример чужие привычки
     is_public = models.BooleanField(default=True, null=True, blank=True, verbose_name='публикация')
+    last_send = models.DateTimeField(auto_now_add=True, null=True, blank=True)
 
     class Meta:
         verbose_name = 'Привычка'
         verbose_name_plural = 'Привычки'
 
     def __str__(self):
-        return f'{self.place} {self.time} {self.action}'
+        return f'Я буду {self.action} в {self.time} {self.place} '

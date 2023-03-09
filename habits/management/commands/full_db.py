@@ -1,3 +1,6 @@
+import datetime
+import telebot
+import requests
 from django.core.management import BaseCommand
 from user.models import User
 from habits.models import Habit
@@ -8,9 +11,9 @@ class Command(BaseCommand):
     def handle(self, *args, **options):
 
         users = [
-            {'email': '123@yandex.ru', 'chat_id': 2100762415},
-            {'email': '321@yandex.ru', 'chat_id': 2100762415},
-            {'email': '213@yandex.ru', 'chat_id': 2100762415},
+            {'email': '123@yandex.ru', 'chat_id': '@hamdaouialex'},
+            {'email': '321@yandex.ru', 'chat_id': '@h'},
+            {'email': '213@yandex.ru', 'chat_id': '@h'},
         ]
 
         users_list = []
@@ -22,13 +25,13 @@ class Command(BaseCommand):
         habits = [
             {'user': User.objects.get(id=1), 'place': 'везде', 'time': '06:00',
              'action': "выпить стакан воды", 'is_pleasant_habit': True,
-             "period": "day", 'lead_time': '120', 'is_public': True},
-            {'user': User.objects.get(id=1), 'place': 'дома', 'time': '06:00',
+             "period": 1, 'lead_time': '120', 'is_public': True},
+            {'user': User.objects.get(id=2), 'place': 'дома', 'time': '06:00',
              'action': "сделать зарядку", 'is_pleasant_habit': False,
-             "period": "day", 'reward': 'похвалить себя, ты молодец', 'lead_time': '1120', 'is_public': True},
+             "period": 1, 'reward': 'похвалить себя, ты молодец', 'lead_time': '1120', 'is_public': True},
             {'user': User.objects.get(id=1), 'place': 'везде', 'time': '06:00',
              'action': "позавтракать", 'is_pleasant_habit': False,
-             "period": "day", 'reward': 'състь конфету', 'lead_time': '1120', 'is_public': True}
+             "period": 1, 'reward': 'състь конфету', 'lead_time': '1120', 'is_public': True}
         ]
 
         habits_list = []
