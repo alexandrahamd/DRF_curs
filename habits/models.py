@@ -1,12 +1,13 @@
 from django.conf import settings
 from django.db import models
 from django.core.validators import MinValueValidator, MaxValueValidator
+from rest_framework import serializers
 
 
 # Create your models here.
 class Habit(models.Model):
 
-    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, verbose_name='пользователь')
+    user = serializers.HiddenField(default=serializers.CurrentUserDefault())
     place = models.CharField(max_length=150, null=True, blank=True, verbose_name='место')
     time = models.TimeField(blank=True, null=True, verbose_name='время')
     action = models.CharField(max_length=150, blank=True, null=True, verbose_name='действие')
