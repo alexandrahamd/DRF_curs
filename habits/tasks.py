@@ -14,7 +14,7 @@ def send_telegram_massage(habit_pk=1):
     now_time = datetime.datetime.now().hour
     token = settings.TOKEN
     days = (now.replace(tzinfo=datetime.timezone.utc) - habit.last_send).days
-    if now_time > habit.time.hour and days > habit.period:
+    if now_time < habit.time.hour and days > habit.period:
         # получаем id_chat
         url = f"https://api.telegram.org/bot{token}/getUpdates"
         req = requests.get(url).json()
