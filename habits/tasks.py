@@ -6,23 +6,21 @@ from habits.models import Habit
 
 
 @app.task
-def send_telegram_massage():
+def send_telegram_massage(habit_pk=1):
     '''функция отправки сообщения в телеграмм'''
 
-    obj_habits = Habit.objects.all()
+    habit = Habit.objects.get(pk=habit_pk)
     now = datetime.datetime.now()
     now_time = datetime.datetime.now().hour
-    for item in obj_habits:
-        days = (now.replace(tzinfo=datetime.timezone.utc) - item.last_send).days
-        # если время на данный момент больше чем время рассылки в модели и прошло больше дней,
-        # чем в периоде, указанном в модели
-        if now_time > item.time.hour and days < item.period:
-            text = str(item)
-            token = settings.TOKEN
-            chat_id = item.user.chat_id
-            # chat_id = '@hamdaouialex'
-            url_req = "https://api.telegram.org/bot" + token + "/sendMessage" + "?chat_id=" + chat_id + "&text=" + text
-            # меняем дату последнего отправления
-            item.last_send = datetime.datetime.now()
-            results = requests.get(url_req)
-            print(results.json())
+    token = settings.TOKEN
+    days = (now.replace(tzinfo=datetime.timezone.utc) - habit.last_send).days
+    if now_time > habit.time.hour and days > habit.period:
+        # получаем id_chat
+        url = f"https://api.telegram.org/bot{token}/getUpdates"
+        req = requests.get(url).json()
+        chat_id = (req['result'][1]['message']['chat']['id'])
+        message = habit
+        url = f"https://api.telegram.org/bot{token}/sendMessage?chat_id={chat_id}&text={message}"
+        # меняем дату последнего отправления
+        habit.last_send = datetime.datetime.now()
+        habit.save()

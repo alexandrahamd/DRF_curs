@@ -16,7 +16,6 @@ class HabitListMyAPIView(generics.ListAPIView):
     queryset = Habit.objects.all()
     serializer_class = HabitSerializer
     permission_classes = [IsAuthenticated]
-    template_name = 'base.html'
 
     def get_queryset(self):
         assert self.queryset is not None, (
@@ -41,31 +40,8 @@ class MyHTMLRenderer(TemplateHTMLRenderer):
 
 
 class HabitListAllAPIView(generics.ListAPIView):
-    # queryset = Habit.objects.filter(is_public=True)
+    queryset = Habit.objects.filter(is_public=True)
     serializer_class = HabitSerializer
-    renderer_classes = [MyHTMLRenderer]
-    template_name = 'habits/base.html'
-
-    def get(self, request, *args, **kwargs):
-        queryset = Habit.objects.all()
-        return Response({'profiles': queryset})
-
-    # def get(self, request, *args, **kwargs):
-    #     queryset = Habit.objects.all()
-    #     content = {'habits': queryset}
-    #     return Response(content)
-
-    # def list(self, request, *args, **kwargs):
-    #     queryset = self.filter_queryset(self.get_queryset())
-    #
-    #     page = self.paginate_queryset(queryset)
-    #     if page is not None:
-    #         serializer = self.get_serializer(page, many=True)
-    #         return self.get_paginated_response(serializer.data)
-    #
-    #     serializer = self.get_serializer(queryset, many=True)
-    #     return Response(serializer.data, "habits/base.html")
-    #     # return render(serializer.data, "habits/base.html")
 
 
 class HabitCreateAPIView(generics.CreateAPIView):
