@@ -1,14 +1,10 @@
 from django.db.models import QuerySet
-from django.shortcuts import render
-from requests import Response
 from rest_framework import generics
 from rest_framework.permissions import IsAuthenticated
-from rest_framework.renderers import TemplateHTMLRenderer
 
 from habits.models import Habit
 from habits.permissions import IsOwner
 from habits.serializers import HabitSerializer
-import requests
 
 
 # Create your views here.
@@ -29,14 +25,6 @@ class HabitListMyAPIView(generics.ListAPIView):
             # Ensure queryset is re-evaluated on each request.
             queryset = queryset.all()
         return queryset
-
-
-class MyHTMLRenderer(TemplateHTMLRenderer):
-    def get_template_context(self, *args, **kwargs):
-        context = super().get_template_context(*args, **kwargs)
-        if isinstance(context, list):
-            context = {"items": context}
-        return context
 
 
 class HabitListAllAPIView(generics.ListAPIView):

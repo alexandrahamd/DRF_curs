@@ -1,11 +1,13 @@
 import datetime
 import requests
+from celery import shared_task
+
 from config.celery import app
 from django.conf import settings
 from habits.models import Habit
 
 
-@app.task
+@shared_task
 def send_telegram_massage(habit_pk=1):
     '''функция отправки сообщения в телеграмм'''
 
