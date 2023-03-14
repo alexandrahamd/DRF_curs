@@ -9,13 +9,13 @@ class Command(BaseCommand):
     def handle(self, *args, **options):
         schedule, created = IntervalSchedule.objects.get_or_create(
             every=1,
-            period=IntervalSchedule.SECONDS,
+            period=IntervalSchedule.MINUTES,
         )
 
         PeriodicTask.objects.create(
             interval=schedule,  # we created this above.
-            name='Send telegram massage',  # simply describes this periodic task.
-            task='config.habits.tasks.send_telegram_massage',  # name of task.
+            name='telegram massage',  # simply describes this periodic task.
+            task='config.habits.tasks.send_massage',  # name of task.
             args=json.dumps(['arg1', 'arg2']),
             kwargs=json.dumps({
                 'be_careful': True,
