@@ -34,20 +34,3 @@ class Command(BaseCommand):
         #     habit.last_send = datetime.datetime.now()
         #     habit.save()
 
-        habit = Habit.objects.get(pk=1)
-        now = datetime.datetime.now()
-        now_time = datetime.datetime.now().hour
-        token = settings.TOKEN
-        days = (now.replace(tzinfo=datetime.timezone.utc) - habit.last_send).days
-        # if now_time > habit.time.hour and days < habit.period:
-        # получаем id_chat
-        url = f"https://api.telegram.org/bot{token}/getUpdates"
-        req = requests.get(url).json()
-        chat_id = (req['result'][1]['message']['chat']['id'])
-        message = habit
-        url = f"https://api.telegram.org/bot{token}/sendMessage?chat_id={chat_id}&text={message}"
-        # меняем дату последнего отправления
-        results = requests.get(url)
-        print(results.json())
-        habit.last_send = datetime.datetime.now()
-        habit.save()

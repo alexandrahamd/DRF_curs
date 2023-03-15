@@ -164,7 +164,7 @@ SIMPLE_JWT = {
 
 TOKEN = os.getenv('TOKEN')
 
-CELERY_BROKER_URL = "redis://127.0.0.1:6379/4"
-CELERY_RESULT_BACKEND = "redis://localhost:6379/4"
+CELERY_BROKER_URL = "redis://127.0.0.1:6379/1"
+CELERY_RESULT_BACKEND = "redis://localhost:6379/1"
 CELERY_BEAT_SCHEDULER = 'django_celery_beat.schedulers:DatabaseScheduler'
 
