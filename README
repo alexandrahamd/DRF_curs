@@ -1,1 +1,5 @@
 docker pull postgres
+docker run --name new_db -p 5432:5432 -ePOSTGRES_PASSWORD=12345 -e POSTGRES_HOST_AUTH_METHOD=md5 postgres
+docker run --network host -it python bash
+docker exec -it 406e6d316d18 bash
+docker container inspect 406e6d316d18
