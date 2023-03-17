@@ -3,3 +3,4 @@ docker run --name new_db -p 5432:5432 -ePOSTGRES_PASSWORD=12345 -e POSTGRES_HOST
 docker run --network host -it python bash
 docker exec -it 406e6d316d18 bash
 docker container inspect 406e6d316d18
+docker run -p POSTGRES_PASSWORD=12345 5432:5432 postgres
