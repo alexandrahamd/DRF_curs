@@ -6,8 +6,6 @@ from habits.models import Habit
 from celery import Celery
 
 
-# def send_massage(habit_pk=1):
-# @shared_task
 @shared_task
 def send_massage(habit_pk=1):
 

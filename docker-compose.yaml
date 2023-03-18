@@ -1,0 +1,38 @@
+version: "3.9"
+
+services:
+  db:
+    image: postgres:14.6-alpine
+    env_file:
+      - .env
+    environment:
+      POSTGRES_USER: "postgres"
+      POSTGRES_PASSWORD: "postgres"
+      POSTGRES_DB: "postgres_test"
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U postgres" ]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+    volumes:
+      - ./pddata:/var/lib/postgresql/data
+
+  api:
+    build:
+      context: .
+    tty: false
+    volumes:
+      - .:/code
+    restart: on-failure
+    ports:
+      - "8088:8080"
+    env_file:
+      - .env
+    depends_on:
+      db:
+        condition: service_healthy
+
+volumes:
+  api:
+  db:
+    driver: local
