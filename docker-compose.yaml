@@ -31,6 +31,33 @@ services:
     depends_on:
       db:
         condition: service_healthy
+    command: python3 manage.py runserver
+#      -python3 manage.py migrate
+
+  redis:
+    image: redis
+    ports:
+      - '6379:6379'
+    healthcheck:
+      test: [ "CMD", "redis-cli", "ping" ]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+    volumes:
+      - ./djangoProject/redis:/usr/local/etc/redis
+
+
+  worker:
+    build: .
+    restart: unless-stopped
+    depends_on:
+      redis:
+        condition: service_healthy
+      api:
+        condition: service_started
+    links:
+      - redis
+    command: bash -c "celery -A config worker --beat --scheduler django --loglevel=info"
 
 volumes:
   api:
